@@ -1,0 +1,80 @@
+系统流程：
+package.json:定义所有的核心组件，搭建项目基层框架。
+
+使用事件传递参数，eg：onClick（传递的是函数的具体，想传递参数需要bind（方法绑定））
+
+主要是为了是node可以支持import导入形式
+"scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+    //主要是建立server文件，启动浏览器
+    //"build": "babel index.js -o server.js && node server"
+    //npm run build就可以直接起动项目了
+  }
+
+一：server搭建node服务器端，浏览器端进程，导入需要的文件
+webpack.config:webpack资源管理配置文件，声明项目的入口文件，静态打包完成文件及相关配置
+重点：热更新部分(双重更新（浏览器，服务端）)
+
+index.js:主要是热更新具体的实现，是页面组装后的呈现，也是入口文件
+
+index连接root（父组件），父组件与index.tpl文件关联,组件将渲染后的页面
+反馈给index呈现。
+
+组件获取到html中的dom节点进行相关组件的构造和方法的书写。
+
+index.tpl:自动化界面，构建各个模块的结构，给组件提供可渲染的节点。
+eg:(header头部部分)（root部分构建相关功能组件。
+header.js通过props方法继承root（父组件的值），构建这部分的显示内容。
+header.less给这部分进行样式上的定义）
+
+
+ref方法：在函数中获得以refs方法获取到ref值，渲染时直接默认ref所在的
+是dom节点，直接可以使用dom的相关操作
+
+root.js（公共化数据存储地方）和player.js参数解析：jPlayer（音频播放插件）
+$.jPlayer.event.timeupdate(更新音频时间)
+jPlayer.status.duration（总共的播放时长）
+jPlayer.status.currentTime（当前播放时间）
+jPlayer.status.currentPercentAbsolute（当前播放占总播放时间的比例）
+
+important:（onProgressChange和progressChangeHandler）
+子组件根据对dom进行绑定，点击时获取闲杂进度条的百分比。
+接受父组件的onProgressChange组件名并将自己当前的process传给父组件
+
+onProgressChange={this.progressChangeHandler}意思是
+父组件里面定义一个组件名是onProgressChange
+子组件接受这个参数名并传回一个数据
+父组件接受到了这个数据并把它传给对应的函数进行操作
+progress.js将自己改变的百分比传给父组件，父组件修改完当前process参数值
+并将最新的再传给process.js
+
+父组件：定义好progressChangeHandler函数，
+并且接受子组件传回的progress值
+
+当文件播放时，此处的更新操作将会执行，获取到此时的值并实时更新
+
+ <Progress progress={this.state.progress} onProgressChange={this.progressChangeHandler} barColor="#000000" />
+
+组件导入时，如果不是export default形式抛出，导入时格式为｛组件名｝
+
+
+progress.js进度操控组件。player播放组件设置最初的进度。点击时各自函数处理
+
+React-router:Link to='uri'跳转部件
+
+/*React.cloneElement将组建的属性全部克隆下来赋值*/
+
+{ React.cloneElement(this.props.children,this.state) }
+将声明后，再调用组件属性的过程转化为Router相关用法
+直接克隆组件的属性放到这了调用。
+
+从新构建根节点。使用router路由组件进行页面的跳转，route进行各部分的搭建
+App组件为顶层组建，播放音乐。
+IndexRoute(Player),音乐播放器页面（默认页面）
+Route（MusicList）音乐列表页面
+
+对于一些重要的功能组件，最好放到根节点，防止也买年跳转毁坏节点
+
+最后：进行列表点击播放功能，上下曲，循环播放
+点击播放可以使用子组件回调函数向父组件传递一个值（但是本次项目嵌入太深，不适合）
+Public.js:可以进行操作后发出一个事件信号，能够接受此信号的发生改变

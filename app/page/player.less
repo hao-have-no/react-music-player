@@ -1,0 +1,106 @@
+.player-page {
+  width: 700px;
+  margin: auto;
+  margin-top: 120px;
+
+  .caption {
+    font-size: 16px;
+    color: rgb(47, 152, 66);
+  }
+
+  .cover {
+    width:200px;
+    height: 200px;
+    margin-left: 20px;
+    -moz-user-select: -moz-none;
+    -khtml-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    .coverBox{
+      width: 200px;
+      height: 200px;
+      position: relative;
+      .pointer{
+        width: 70px;
+        height: 106px;
+        display: inline-block;
+        position: absolute;
+        top: -45px;
+        background-size: 100% 100%;
+        left: 12px;
+        transform: rotate(0deg);
+        transform-origin: right top;
+      }
+      .transform-rotate10{
+        transform: rotate(10deg);
+        -moz-transform: rotate(10deg);
+        -webkit-transform: rotate(10deg);
+        -o-transform: rotate(10deg);
+      }
+      @-webkit-keyframes rotation{
+        from {-webkit-transform: rotate(0deg);}
+        to {-webkit-transform: rotate(360deg);}
+      }
+      .rotate{
+        -webkit-transform: rotate(360deg);
+        animation: rotation 3s linear infinite;
+        -moz-animation: rotation 3s linear infinite;
+        -webkit-animation: rotation 3s linear infinite;
+        -o-animation: rotation 3s linear infinite;
+      }
+      .isRotate{
+        animation-play-state: paused;
+      }
+      img {
+        width: 160px;
+        height: 160px;
+        border-radius: 50%;
+        margin: 20px 0 0 20px;
+      }
+    }
+  }
+  .volume-container {
+    position: relative;
+    left: 20px;
+    top: -3px;
+  }
+  .volume-container .volume-wrapper {
+    opacity: 0;
+    transition: opacity .5s linear;
+  }
+  .volume-container:hover .volume-wrapper {
+    opacity: 1;
+  }
+  .music-title {
+    font-size: 25px;
+    font-weight: 400;
+    color: rgb(3, 3, 3);
+    height: 36px;
+    line-height: 36px;
+  }
+  .music-artist {
+    font-size: 15px;
+    font-weight: 400;
+    color: rgb(74, 74, 74);
+  }
+  .left-time {
+    font-size: 14px;
+    color: #999;
+    font-weight: 400;
+    width: 40px;
+  }
+  .icon {
+    cursor: pointer;
+  }
+  .ml20 {
+    margin-left: 20px;
+  }
+  .mt35 {
+    margin-top: 35px;
+  }
+  .volume-wrapper {
+    width: 60px;
+    display: inline-block;
+  }
+}
