@@ -7,14 +7,24 @@ import {Router,IndexRoute,Link,Route,hashHistory} from 'react-router';
 
 
 //音乐不播放器顶级组件
-let App=React.createClass({
-    getInitialState(){
-        return {
+class App extends React.Component{
+    constructor(props){
+        super(props);
+        this.state ={
             musicList:MUSIC_LIST,
             currentMusicItem:MUSIC_LIST[0],
             repeatType:'cycle'//循环类型，默认顺序播放
         }
-    },
+    }
+
+    // getInitialState(){
+    //     return {
+    //         musicList:MUSIC_LIST,
+    //         currentMusicItem:MUSIC_LIST[0],
+    //         repeatType:'cycle'//循环类型，默认顺序播放
+    //     }
+    // }
+
     playMusic(musicItem){
       $('#player').jPlayer('setMedia',{
          mp3: musicItem.file
@@ -22,7 +32,8 @@ let App=React.createClass({
         this.setState({
             currentMusicItem: musicItem
         });
-    },
+    }
+
     playNext(type = "text"){
         let index=this.findMusicIndex(this.state.currentMusicItem);
         let newIndex = null;
@@ -33,10 +44,12 @@ let App=React.createClass({
             newIndex =(index - 1 +musicListLength) % musicListLength;
         }
         this.playMusic(this.state.musicList[newIndex]);
-    },
+    }
+
     findMusicIndex(musicItem){
         return this.state.musicList.indexOf(musicItem);
-    },
+    }
+
     playWhenEnd(){
         let Type = this.state.repeatType;
         if(Type === 'random'){
@@ -48,7 +61,8 @@ let App=React.createClass({
         }else {
             this.playNext('next');
         }
-    },
+    }
+
     componentDidMount(){
         var self=this;
         $('#player').jPlayer({
@@ -71,15 +85,19 @@ let App=React.createClass({
                 })
             })
         });
+
         PubSub.subscribe('PlAY_MUSIC',(msg,musicItem) =>{
            this.playMusic(musicItem);
         });
+
         PubSub.subscribe('PLAY_PREV',(msg,musicItem) =>{
             this.playNext('prev');
         });
+
         PubSub.subscribe('PLAY_NEXT',(msg,musicItem) =>{
             this.playNext('next');
         });
+
         //绑定事件（观察者模式），底层组件监听反映到上层处理，底层做好逻辑处理再反馈到上层组件
         //React.cloneElement给所有子元素添加当前的属性（ROOT是父组件，易用子组件传递属性，也是中枢部分，所有底层的通用的都可以再次声明）
         let repeatList=['once','cycle','random']
@@ -89,14 +107,16 @@ let App=React.createClass({
                 repeatType:repeatList[(index+1)%repeatList.length]
             });
         })
-    },
+    }
+
     componentWillUnMount(){
         PubSub.unsubscribe('PLAY_MUSIC');
         PubSub.unsubscribe('DELETE_MUSIC');
         PubSub.unsubscribe('PlAY_MUSIC');
         PubSub.unsubscribe('PLAY_NEXT');
         $('#player').unbind($.jPlayer.event.ended);
-    },
+    }
+
     render(){
         return (
             <div>
@@ -105,9 +125,9 @@ let App=React.createClass({
                 </div>
         );
     }
-});
+}
 //控制页面的跳转
-let Root=React.createClass({
+class Root extends React.Component{
     render(){
         return (
         <Router history={hashHistory}>
@@ -118,6 +138,6 @@ let Root=React.createClass({
         </Router>
         );
     }
-});
+}
 
 export default Root;
